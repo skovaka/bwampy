@@ -1,8 +1,16 @@
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+#include <pybind11/numpy.h>
+#include <pybind11/stl_bind.h>
+
 #include "bwampy.hpp"
 
 #define PY_BWA_INDEX_METH(P) c.def(#P, &RefIndex::P);
 #define PY_BWA_INDEX_VEC(P) c.def(#P, py::vectorize(&RefIndex::P));
 namespace py = pybind11;
+using namespace pybind11::literals;
+
+PYBIND11_MAKE_OPAQUE(std::vector<u8>);
 
 PYBIND11_MODULE(bwampy, m) {
     m.doc() = R"pbdoc(Python wrapper for BWA low-level FM-index mapping functions)pbdoc";
@@ -18,6 +26,8 @@ PYBIND11_MODULE(bwampy, m) {
                 {sizeof(u64) * r.W, sizeof(u64)}
             );
     });
+
+    py::bind_vector<std::vector<u8>>(m, "ArrayU8", py::buffer_protocol());
 
     py::class_<RefIndex> c(m, "RefIndex");
 
@@ -49,6 +59,8 @@ PYBIND11_MODULE(bwampy, m) {
     //PY_BWA_INDEX_METH(range_to_fms);
     PY_BWA_INDEX_METH(is_mref_fwd);
     PY_BWA_INDEX_METH(is_mref_flipped);
+    c.def("get_bases", &RefIndex::get_bases,
+          py::arg("name"), py::arg("start"), py::arg("end"), py::arg("comp")=false);
     PY_BWA_INDEX_VEC(get_base);
     c.def("pac_to_ref_id", static_cast<i32 (RefIndex::*)(i64)> (&RefIndex::pac_to_ref_id) );
     c.def("mref_to_ref_id", static_cast<i32 (RefIndex::*)(i64)> (&RefIndex::mref_to_ref_id) );

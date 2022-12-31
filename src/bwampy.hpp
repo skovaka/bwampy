@@ -305,6 +305,20 @@ class RefIndex {
         return ((pacseq_[i] >> shift) & 3) ^ (comp | (comp<<1));
     }
 
+    std::vector<u8> get_bases(std::string name, i64 start, i64 end, bool comp=false) {
+        if (start >= end) {
+            throw std::out_of_range("Reference start must be less than end");
+        }
+        auto shift = get_pac_shift(name);
+        auto pac_start = start + shift, pac_end = end + shift;
+        std::vector<u8> ret;
+        ret.reserve(end-start);
+        for (auto i = pac_start; i < pac_end; i++) {
+            ret.push_back(get_base(i, comp));
+        }
+        return ret;
+    }
+
     PanKmerBitvec pan_kmer_bitvec(std::vector<u8> seq, size_t k, GenomeChrs chr_groups) {
         //std::vector< std::vector<i32> > rids;
         std::unordered_map<int, int> rid_groups;
