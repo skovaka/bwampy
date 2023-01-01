@@ -1,8 +1,8 @@
-__title__     = "uncalled"
-__version__   = "3.3.0"
-__summary__   = "A toolkit for nanopore signal alignment, analysis, and visualization",
+__title__     = "bwampy"
+__version__   = "0.0.1"
+__summary__   = "Low-level wrapper for BWA mapping functions",
 __author__    = "Sam Kovaka"
 __email__     = "skovaka@gmail.com"
-__uri__       = "https://github.com/skovaka/UNCALLED"
+__uri__       = "https://github.com/skovaka/bwampy"
 __license__   = "MIT License"
-__copyright__ = f"2021 {__author__}"
+__copyright__ = f"2022 {__author__}"
